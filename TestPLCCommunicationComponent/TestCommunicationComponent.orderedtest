@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<OrderedTest name="TestCommunicationComponent" storage="d:\vincent\my documents\projects\vindaplc\testplccommunicationcomponent\testcommunicationcomponent.orderedtest" id="e260e3e8-00f7-4d8e-9b4f-4b664660353a" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestLinks>
+    <TestLink id="b651a42d-4dc4-b9d5-eb90-ca48a58dfbe4" name="TestGetSetDevice" storage="..\debug\defaulttest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <TestLink id="e0ca5762-a220-9d9e-5f4c-9693a4b85f83" name="TestGetSetDeviceBlock" storage="..\debug\defaulttest.dll" type="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestElement, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.ObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  </TestLinks>
+</OrderedTest>

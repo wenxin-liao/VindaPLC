@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RecordLineList>
+  <RecordLine PalletizerName="MD1" ReadMarkDevice="D01001" PlateCodeDevice="D01002">
+    <Record BoxCodeDevice="D01012" AmountDevice="D01026"/>
+    <Record BoxCodeDevice="D01032" AmountDevice="D01046"/>
+  </RecordLine>
+  <RecordLine PalletizerName="MD2" ReadMarkDevice="D01101" PlateCodeDevice="D01102">
+    <Record BoxCodeDevice="D01112" AmountDevice="D01126"/>
+    <Record BoxCodeDevice="D01132" AmountDevice="D01146"/>
+  </RecordLine>
+  <RecordLine PalletizerName="MD3" ReadMarkDevice="D01201" PlateCodeDevice="D01202">
+    <Record BoxCodeDevice="D01212" AmountDevice="D01226"/>
+    <Record BoxCodeDevice="D01232" AmountDevice="D01246"/>
+  </RecordLine>
+  <RecordLine PalletizerName="MD4" ReadMarkDevice="D01301" PlateCodeDevice="D01302">
+    <Record BoxCodeDevice="D01312" AmountDevice="D01326"/>
+    <Record BoxCodeDevice="D01332" AmountDevice="D01346"/>
+  </RecordLine>
+</RecordLineList>
