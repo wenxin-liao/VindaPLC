@@ -306,7 +306,7 @@ namespace PLCDeviceMonitor
 
                 PlateCode = regularStr.ToString();
 
-                Log.Info(String.Format("托盘码读取成功. 软元件地址：[{0}]. 托盘码：Data [{1}].", PlateCodeDevice, PlateCode));
+                Log.Info(String.Format("托盘码读取成功. 软元件地址：[{0}]. 托盘码：[{1}].", PlateCodeDevice, PlateCode));
             }
             catch (System.Exception ex)
             {
@@ -381,6 +381,7 @@ namespace PLCDeviceMonitor
         String m_MsgFormatter;
         bool m_ValidatePlateCode;
         bool m_ValidateBoxCode;
+        bool m_ValidateRecordNum;
         int m_DBRetryInterval;
         int m_DBRetryTimes;
 
@@ -457,10 +458,11 @@ namespace PLCDeviceMonitor
         /// </summary>
         /// <param name="_BKFilename"></param>
         /// <param name="_DBConnectionString"></param>
-        public void Initialize(String _BKFilename, String _DBConnectionString, String _MsgFormatter, bool _ValidatePlateCode, bool _ValidateBoxCode, int _DBRetryInterval, int _DBRetryTimes)
+        public void Initialize(String _BKFilename, String _DBConnectionString, String _MsgFormatter, bool _ValidatePlateCode, bool _ValidateBoxCode, bool _ValidateRecordNum, int _DBRetryInterval, int _DBRetryTimes)
         {
             m_ValidatePlateCode = _ValidatePlateCode;
             m_ValidateBoxCode = _ValidateBoxCode;
+            m_ValidateRecordNum = _ValidateRecordNum;
 
             m_DBRetryInterval = _DBRetryInterval;
             m_DBRetryTimes = _DBRetryTimes;
@@ -472,16 +474,52 @@ namespace PLCDeviceMonitor
 
         private void ValidateData(RecordLine recordLine)
         {
-            if (m_ValidatePlateCode)
+            {
+                bool hasInvalidChar = false;
                 foreach (Char c in recordLine.PlateCode)
-                    if (!Char.IsDigit(c))
-                        throw new Exception(String.Format("从设备 {0} 获取的托盘码 {1} 含有无法验证的非法字符.", recordLine.PalletizerName, recordLine.PlateCode));
+                    hasInvalidChar |= !Char.IsDigit(c);
 
-            if (m_ValidateBoxCode)
-                foreach (Record r in recordLine.Records)
-                    foreach (Char c in r.BoxCode)
-                        if (!Char.IsLetterOrDigit(c))
-                            throw new Exception(String.Format("从设备 {0} 获取的箱码 {1} 含有无法验证的非法字符.", recordLine.PalletizerName, r.BoxCode));
+                if (hasInvalidChar)
+                {
+                    String msg = "托盘码发现非法字符.";
+                    if (m_ValidatePlateCode)
+                        throw new Exception(msg);
+                    else
+                        Log.Warn(msg);
+                }
+            }
+
+            {
+                bool allEmpty = true;
+                foreach (Record record in recordLine.Records)
+                    allEmpty &= record.ReadMark == 0;
+
+                if (allEmpty)
+                {
+                    String msg = "货物数量为 0.";
+                    if (m_ValidateRecordNum)
+                        throw new Exception(msg);
+                    else
+                        Log.Warn(msg);
+                }
+            }
+
+            {
+                bool hasInvalidChar = false;
+                foreach (Record record in recordLine.Records)
+                    if (record.ReadMark != 0)
+                        foreach (Char c in record.BoxCode)
+                            hasInvalidChar |= !Char.IsDigit(c);
+
+                if (hasInvalidChar)
+                {
+                    String msg = "货物箱码发现非法字符.";
+                    if (m_ValidatePlateCode)
+                        throw new Exception(msg);
+                    else
+                        Log.Warn(msg);
+                }
+            }
         }
 
         /// <summary>
@@ -552,9 +590,11 @@ namespace PLCDeviceMonitor
                 }
                 catch (System.Exception ex)
                 {
-                    Log.Error(String.Format("第 {0} 次尝试保存数据到数据库失败.", retryTime));
+                    Log.Warn(String.Format("第 {0} 次尝试保存数据到数据库失败.", retryTime));
                     if (++retryTime > m_DBRetryTimes)
                         throw new Exception(String.Format("保存数据到数据库失败. {0}", ex));
+
+                    Thread.Sleep(m_DBRetryInterval);
                 }
             }
         }
@@ -681,6 +721,27 @@ namespace PLCDeviceMonitor
         }
 
         /// <summary>
+        /// warn msg
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void Warn(String msg)
+        {
+            if (null != m_Logger)
+                m_Logger.Warn(msg);
+        }
+
+        /// <summary>
+        /// warn msg & ex
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="ex"></param>
+        public static void Warn(String msg, Exception ex)
+        {
+            if (null != m_Logger)
+                m_Logger.Warn(msg, ex);
+        }
+
+        /// <summary>
         /// error msg
         /// </summary>
         /// <param name="msg"></param>
@@ -759,6 +820,7 @@ namespace PLCDeviceMonitor
         public String LogFormatter = null;
         public bool ValidatePlateCode = true;
         public bool ValidateBoxCode = false;
+        public bool ValidateRecordNum = true;
         public int DBRetryInterval = 1000;
         public int DBRetryTimes = 3;
     }
@@ -837,11 +899,11 @@ namespace PLCDeviceMonitor
         /// </summary>
         /// <param name="_BKFilename"></param>
         /// <param name="_DBConnectionString"></param>
-        void InitializeDataProcessor(String _BKFilename, String _DBConnectionString, String _MsgFormatter, bool _ValidatePlateCode, bool _ValidateBoxCode, int _DBRetryInterval, int _DBRetryTimes)
+        void InitializeDataProcessor(String _BKFilename, String _DBConnectionString, String _MsgFormatter, bool _ValidatePlateCode, bool _ValidateBoxCode, bool _ValidateRecordNum, int _DBRetryInterval, int _DBRetryTimes)
         {
             try
             {
-                m_DataProcessor.Initialize(_BKFilename, _DBConnectionString, _MsgFormatter, _ValidatePlateCode, _ValidateBoxCode, _DBRetryInterval, _DBRetryTimes);
+                m_DataProcessor.Initialize(_BKFilename, _DBConnectionString, _MsgFormatter, _ValidatePlateCode, _ValidateBoxCode, _ValidateRecordNum, _DBRetryInterval, _DBRetryTimes);
             }
             catch (System.Exception ex)
             {
@@ -949,7 +1011,15 @@ namespace PLCDeviceMonitor
             monitor.InitializeCommComponent(config.LogicalStationNum);
             monitor.InitializeMonitorInterval(config.MonitorInterval);
             monitor.InitializeRecordLines(config.RecordConfigFilename);
-            monitor.InitializeDataProcessor(config.BackupFilename, config.DBConnectionString, config.MsgFormatter, config.ValidatePlateCode, config.ValidateBoxCode, config.DBRetryInterval, config.DBRetryTimes);
+            monitor.InitializeDataProcessor(
+                config.BackupFilename, 
+                config.DBConnectionString, 
+                config.MsgFormatter, 
+                config.ValidatePlateCode, 
+                config.ValidateBoxCode, 
+                config.ValidateRecordNum, 
+                config.DBRetryInterval, 
+                config.DBRetryTimes);
 
             return monitor;
         }

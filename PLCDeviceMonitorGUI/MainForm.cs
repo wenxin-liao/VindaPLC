@@ -92,6 +92,9 @@ namespace PLCDeviceMonitorGUI
                     case "INFO":
                         color = Color.Navy;
                         break;
+                    case "WARN":
+                        color = Color.DarkGoldenrod;
+                        break;
                     case "ERROR":
                         color = Color.Red;
                         break;
@@ -142,8 +145,10 @@ namespace PLCDeviceMonitorGUI
             config.DBRetryTimes = Properties.Settings.Default.DBRetryTimes;
 
             config.MsgFormatter = Properties.Settings.Default.MsgFormatter;
+
             config.ValidatePlateCode = Properties.Settings.Default.ValidatePlateCode;
             config.ValidateBoxCode = Properties.Settings.Default.ValidateBoxCode;
+            config.ValidateRecordNum = Properties.Settings.Default.ValidateRecordNum;
 
             config.LogFilename = Properties.Settings.Default.LogFilename;
             config.LogFormatter = Properties.Settings.Default.LogFormatter;

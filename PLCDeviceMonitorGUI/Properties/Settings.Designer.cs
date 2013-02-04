@@ -111,35 +111,11 @@ namespace PLCDeviceMonitorGUI.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.101.2" +
-            "42)(PORT=1528)))(CONNECT_DATA=(SERVICE_NAME = TUAT2)));User Id=cuxwms;Password=c" +
-            "uxwms;")]
+            "42)(PORT=1528)))(CONNECT_DATA=(SERVICE_NAME = UAT2)));User Id=cuxwms;Password=cu" +
+            "xwms;")]
         public string OracleDB {
             get {
                 return ((string)(this["OracleDB"]));
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ValidatePlateCode {
-            get {
-                return ((bool)(this["ValidatePlateCode"]));
-            }
-            set {
-                this["ValidatePlateCode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ValidateBoxCode {
-            get {
-                return ((bool)(this["ValidateBoxCode"]));
-            }
-            set {
-                this["ValidateBoxCode"] = value;
             }
         }
         
@@ -176,6 +152,42 @@ namespace PLCDeviceMonitorGUI.Properties {
             }
             set {
                 this["DBRetryTimes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ValidatePlateCode {
+            get {
+                return ((bool)(this["ValidatePlateCode"]));
+            }
+            set {
+                this["ValidatePlateCode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ValidateBoxCode {
+            get {
+                return ((bool)(this["ValidateBoxCode"]));
+            }
+            set {
+                this["ValidateBoxCode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ValidateRecordNum {
+            get {
+                return ((bool)(this["ValidateRecordNum"]));
+            }
+            set {
+                this["ValidateRecordNum"] = value;
             }
         }
     }
