@@ -509,7 +509,7 @@ namespace PLCDeviceMonitor
                 foreach (Record record in recordLine.Records)
                     if (record.ReadMark != 0)
                         foreach (Char c in record.BoxCode)
-                            hasInvalidChar |= !Char.IsDigit(c);
+                            hasInvalidChar |= !Char.IsLetterOrDigit(c);
 
                 if (hasInvalidChar)
                 {
