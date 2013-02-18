@@ -190,5 +190,17 @@ namespace PLCDeviceMonitorGUI.Properties {
                 this["ValidateRecordNum"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SingleInstance {
+            get {
+                return ((bool)(this["SingleInstance"]));
+            }
+            set {
+                this["SingleInstance"] = value;
+            }
+        }
     }
 }

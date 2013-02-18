@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using log4net.Core;
 using PLCDeviceMonitor;
+using PLCDeviceMonitorLogDatabase;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -22,8 +23,11 @@ namespace PLCDeviceMonitorGUI
         String logFilename;
         String logFormatter;
 
+        BackgroundWorker showLogWorker;
         BackgroundWorker initializeWorker;
         BackgroundWorker startWorker;
+
+        ShareQueue<LoggingEvent> logEventQueue;
 
         /// <summary>
         /// constructor
@@ -37,84 +41,19 @@ namespace PLCDeviceMonitorGUI
         }
 
         /// <summary>
-        /// make main thread invoker given func
-        /// </summary>
-        /// <param name="invoker"></param>
-        public void InvokeMethod( Object invoker )
-        {
-            MethodInvoker mInvoker = invoker as MethodInvoker;
-            if (null != mInvoker)
-            {
-                try
-                {
-                    Invoke(mInvoker);
-                }
-                catch (System.Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-        }
-
-        /// <summary>
         /// implement interface of ILogControl
-        /// push log data into threadpool, it will be invoker by main thread async
         /// </summary>
-        /// <param name="level"></param>
-        /// <param name="msg"></param>
-        /// <param name="ex"></param>
         public void DoLog(LoggingEvent loggingEvent)
         {
-            if (InvokeRequired)
-            {
-                MethodInvoker invoker = () => DoLog(loggingEvent);
-                ThreadPool.QueueUserWorkItem(this.InvokeMethod, invoker);
-                return;
-            }
-
-            String msg = String.Format("{0} - {1},{2:D3} - {3} - T[{4}] - [ {5} ] {6}\n",
-                loggingEvent.LoggerName,
-                loggingEvent.TimeStamp,
-                loggingEvent.TimeStamp.Millisecond,
-                loggingEvent.Level,
-                loggingEvent.ThreadName,
-                loggingEvent.MessageObject,
-                loggingEvent.ExceptionObject);
-
-            lock (logLock)
-            {
-                Color color = Color.Black;
-                switch (loggingEvent.Level.Name)
-                {
-                    case "DEBUG":
-                        color = Color.Navy;
-                        break;
-                    case "INFO":
-                        color = Color.Navy;
-                        break;
-                    case "WARN":
-                        color = Color.DarkGoldenrod;
-                        break;
-                    case "ERROR":
-                        color = Color.Red;
-                        break;
-                    case "FATAL":
-                        color = Color.Red;
-                        break;
-                }
-
-                int start = LogTextBox.Text.Length;
-                LogTextBox.AppendText(msg);
-                LogTextBox.Select(start, msg.Length);
-                LogTextBox.SelectionColor = color;
-                LogTextBox.SelectionLength = 0;
-            }
+            logEventQueue.Enqueue(loggingEvent);
         }
 
         private void InitializeGUI()
         {
             this.Text = Properties.Settings.Default.Title;
             Thread.CurrentThread.Name = "Main";
+
+            logEventQueue = new ShareQueue<LoggingEvent>();
 
             initializeWorker = new BackgroundWorker();
             initializeWorker.DoWork += new DoWorkEventHandler(InitializeMonitor);
@@ -124,6 +63,9 @@ namespace PLCDeviceMonitorGUI
             startWorker.DoWork += new DoWorkEventHandler(StartMonitor);
             startWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(StartComplete);
 
+            showLogWorker = new BackgroundWorker();
+            showLogWorker.DoWork += new DoWorkEventHandler(ShowLog);
+            showLogWorker.RunWorkerAsync();
         }
 
         /// <summary>
@@ -168,9 +110,68 @@ namespace PLCDeviceMonitorGUI
             PLCDeviceMonitor.Log.OpenLog("PLC-GUI");
         }
 
-        /// <summary>
-        /// initialize monitor
-        /// </summary>
+        void ShowLog(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                while (true)
+                {
+                    LoggingEvent loggingEvent = logEventQueue.Dequeue();
+
+                    LogEvent item = new LogEvent()
+                    {
+                        Time = loggingEvent.TimeStamp,
+                        Level = loggingEvent.Level.ToString(),
+                        ThreadName = loggingEvent.ThreadName,
+                        Msg = loggingEvent.MessageObject.ToString(),
+                        Exception = loggingEvent.ExceptionObject == null ? null : loggingEvent.ExceptionObject.ToString(),
+                    };
+
+                    PLCDeviceMonitorLogDatabaseDriver.InsertLogEvent(item);
+
+                    String msg = String.Format("{0} - {1},{2:D3} - {3} - T[{4}] - [ {5} ] {6}\n",
+                        loggingEvent.LoggerName,
+                        loggingEvent.TimeStamp,
+                        loggingEvent.TimeStamp.Millisecond,
+                        loggingEvent.Level,
+                        loggingEvent.ThreadName,
+                        loggingEvent.MessageObject,
+                        loggingEvent.ExceptionObject);
+
+                    Color color = Color.Black;
+                    switch (loggingEvent.Level.Name)
+                    {
+                        case "DEBUG":
+                        case "INFO":
+                            color = Color.Navy;
+                            break;
+                        case "WARN":
+                            color = Color.DarkGoldenrod;
+                            break;
+                        case "ERROR":
+                        case "FATAL":
+                            color = Color.Red;
+                            break;
+                    }
+
+                    MethodInvoker invoker = () =>
+                    {
+                        int start = LogTextBox.Text.Length;
+                        LogTextBox.AppendText(msg);
+                        LogTextBox.Select(start, msg.Length);
+                        LogTextBox.SelectionColor = color;
+                        LogTextBox.SelectionLength = 0;
+                    };
+
+                    Invoke(invoker);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
         private void InitializeMonitor(object sender, DoWorkEventArgs e)
         {
             Thread.CurrentThread.Name = "Main";
@@ -316,46 +317,8 @@ namespace PLCDeviceMonitorGUI
         {
             if (StopMonitorButton.Enabled)
                 StopMonitorButton_Click(null, null);
-        }
-    }
 
-    public interface ILogControl
-    {
-        void DoLog(LoggingEvent loggingEvent);
-    }
-
-    public class ControlAppender : log4net.Appender.IAppender
-    {
-        ILogControl m_LogControl;
-        String m_Name;
-
-        public ControlAppender(ILogControl control)
-        {
-            m_LogControl = control;
-            m_Name = "ControlAppender";
-        }
-
-        public void Close()
-        {
-            m_LogControl = null;
-        }
-
-        public void DoAppend(LoggingEvent loggingEvent)
-        {
-            if (null != m_LogControl)
-                m_LogControl.DoLog(loggingEvent);
-        }
-
-        public String Name
-        {
-            get
-            {
-                return m_Name;
-            }
-            set
-            {
-                m_Name = value;
-            }
+            logEventQueue.Shutdown();
         }
     }
 }

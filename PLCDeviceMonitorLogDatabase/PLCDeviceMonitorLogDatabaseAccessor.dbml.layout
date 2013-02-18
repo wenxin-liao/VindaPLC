@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="PLCDeviceMonitorLogDatabaseAccessor">
+  <DataContextMoniker Name="/PLCDeviceMonitorLogDatabaseAccessorDataContext" />
+  <nestedChildShapes>
+    <classShape Id="1e191407-b7d2-4277-b37b-f04a8852e7bc" absoluteBounds="2.125, 1, 2, 1.9631982421875">
+      <DataClassMoniker Name="/PLCDeviceMonitorLogDatabaseAccessorDataContext/LogEvent" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e3bbbbd8-6edc-4cb2-a7f3-b765e995717e" absoluteBounds="2.1399999999999997, 1.46, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="PLCDeviceMonitorLogDatabase" Class="PLCDeviceMonitorLogDatabaseAccessorDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\SQLEXPRESS;AttachDbFilename=|DataDirectory|\PLCDeviceMonitorLogDatabase.mdf;Integrated Security=True;User Instance=True" SettingsObjectName="PLCDeviceMonitorLogDatabase.Properties.Settings" SettingsPropertyName="PLCDeviceMonitorLogDatabaseConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.LogEvent" Member="LogEvents">
+    <Type Name="LogEvent">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Time" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="[Level]" Member="Level" Type="System.String" DbType="NChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="ThreadName" Type="System.String" DbType="NChar(16) NOT NULL" CanBeNull="false" />
+      <Column Name="Msg" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Exception" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
