@@ -33,6 +33,9 @@ namespace PLCDeviceMonitorLogDatabase
     partial void InsertLogEvent(LogEvent instance);
     partial void UpdateLogEvent(LogEvent instance);
     partial void DeleteLogEvent(LogEvent instance);
+    partial void InsertRecord(Record instance);
+    partial void UpdateRecord(Record instance);
+    partial void DeleteRecord(Record instance);
     #endregion
 		
 		public PLCDeviceMonitorLogDatabaseAccessorDataContext() : 
@@ -70,6 +73,14 @@ namespace PLCDeviceMonitorLogDatabase
 			get
 			{
 				return this.GetTable<LogEvent>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Record> Records
+		{
+			get
+			{
+				return this.GetTable<Record>();
 			}
 		}
 	}
@@ -231,6 +242,140 @@ namespace PLCDeviceMonitorLogDatabase
 					this._Exception = value;
 					this.SendPropertyChanged("Exception");
 					this.OnExceptionChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Record")]
+	public partial class Record : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _ID;
+		
+		private string _MachineName;
+		
+		private System.DateTime _Time;
+		
+		private string _Msg;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(long value);
+    partial void OnIDChanged();
+    partial void OnMachineNameChanging(string value);
+    partial void OnMachineNameChanged();
+    partial void OnTimeChanging(System.DateTime value);
+    partial void OnTimeChanged();
+    partial void OnMsgChanging(string value);
+    partial void OnMsgChanged();
+    #endregion
+		
+		public Record()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MachineName", DbType="NChar(10) NOT NULL", CanBeNull=false)]
+		public string MachineName
+		{
+			get
+			{
+				return this._MachineName;
+			}
+			set
+			{
+				if ((this._MachineName != value))
+				{
+					this.OnMachineNameChanging(value);
+					this.SendPropertyChanging();
+					this._MachineName = value;
+					this.SendPropertyChanged("MachineName");
+					this.OnMachineNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Time", DbType="DateTime NOT NULL")]
+		public System.DateTime Time
+		{
+			get
+			{
+				return this._Time;
+			}
+			set
+			{
+				if ((this._Time != value))
+				{
+					this.OnTimeChanging(value);
+					this.SendPropertyChanging();
+					this._Time = value;
+					this.SendPropertyChanged("Time");
+					this.OnTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Msg", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Msg
+		{
+			get
+			{
+				return this._Msg;
+			}
+			set
+			{
+				if ((this._Msg != value))
+				{
+					this.OnMsgChanging(value);
+					this.SendPropertyChanging();
+					this._Msg = value;
+					this.SendPropertyChanged("Msg");
+					this.OnMsgChanged();
 				}
 			}
 		}

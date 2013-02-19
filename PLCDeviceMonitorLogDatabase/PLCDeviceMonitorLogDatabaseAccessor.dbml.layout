@@ -8,5 +8,11 @@
         <elementListCompartment Id="e3bbbbd8-6edc-4cb2-a7f3-b765e995717e" absoluteBounds="2.1399999999999997, 1.46, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="6c7c13d1-3072-4a7b-821a-7c949479ff84" absoluteBounds="5.125, 1, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/PLCDeviceMonitorLogDatabaseAccessorDataContext/Record" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0439543a-44a9-4803-ba48-f2dc7f68d0e9" absoluteBounds="5.14, 1.46, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

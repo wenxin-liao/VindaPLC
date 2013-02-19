@@ -24,6 +24,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PLCDeviceMonitorTester", "P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PLCDeviceMonitorLogDatabase", "PLCDeviceMonitorLogDatabase\PLCDeviceMonitorLogDatabase.csproj", "{9D4B028C-3935-4B76-B96E-AC0A469075FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PLCDeviceMonitorService", "PLCDeviceMonitorService\PLCDeviceMonitorService.csproj", "{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PLCDeviceMonitorWeb", "PLCDeviceMonitorWeb\PLCDeviceMonitorWeb.csproj", "{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = VindaPLC.vsmdi
@@ -145,6 +149,30 @@ Global
 		{9D4B028C-3935-4B76-B96E-AC0A469075FC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9D4B028C-3935-4B76-B96E-AC0A469075FC}.Release|Win32.ActiveCfg = Release|Any CPU
 		{9D4B028C-3935-4B76-B96E-AC0A469075FC}.Release|x86.ActiveCfg = Release|Any CPU
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Debug|Win32.ActiveCfg = Debug|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Debug|x86.ActiveCfg = Debug|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Debug|x86.Build.0 = Debug|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Release|Any CPU.ActiveCfg = Release|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Release|Mixed Platforms.Build.0 = Release|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Release|Win32.ActiveCfg = Release|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Release|x86.ActiveCfg = Release|x86
+		{4F5B7303-3AAB-40C7-8DD1-5F1FB015AF4D}.Release|x86.Build.0 = Release|x86
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Release|Win32.ActiveCfg = Release|Any CPU
+		{4319593F-F0A6-4EA6-A55F-62E8B8F2492A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
