@@ -377,7 +377,7 @@ namespace PLCDeviceMonitor
     public class DataProcessor
     {
         log4net.Appender.IAppender m_BackupAppender;
-        OracleConnection m_DBConnection;
+        String m_DBConnectionString;
         String m_MsgFormatter;
         bool m_ValidatePlateCode;
         bool m_ValidateBoxCode;
@@ -434,22 +434,27 @@ namespace PLCDeviceMonitor
         /// intialize db connection
         /// </summary>
         /// <param name="_DBConnectionString"></param>
-        void InitializeDBConnection(String _DBConnectionString)
+        public OracleConnection InitializeDBConnection()
         {
             try
             {
-                if (!String.IsNullOrEmpty(_DBConnectionString) && null == m_DBConnection)
-                {
-                    m_DBConnection = new OracleConnection(_DBConnectionString);
-                    m_DBConnection.Open();
 
-                    Log.Info(String.Format("初始化数据库连接成功. 数据库连接字：[{0}].", _DBConnectionString));
+                if (!String.IsNullOrEmpty(m_DBConnectionString))
+                {
+                    OracleConnection connection = new OracleConnection(m_DBConnectionString);
+                    connection.Open();
+
+                    Log.Info(String.Format("初始化数据库连接成功. 数据库连接字：[{0}].", m_DBConnectionString));
+
+                    return connection;
                 }
+                else
+                    return null;
             }
             catch (System.Exception ex)
             {
-                m_DBConnection = null;
-                Log.Error(String.Format("初始化数据库连接失败. 数据库连接字：[{0}].", _DBConnectionString), ex);
+                Log.Error(String.Format("初始化数据库连接失败. 数据库连接字：[{0}].", m_DBConnectionString), ex);
+                return null;
             }
         }
 
@@ -467,9 +472,11 @@ namespace PLCDeviceMonitor
             m_DBRetryInterval = _DBRetryInterval;
             m_DBRetryTimes = _DBRetryTimes;
 
+            m_DBConnectionString = _DBConnectionString;
+
             InitializeMsgFromatter(_MsgFormatter);
             InitializeBackupFile(_BKFilename);
-            InitializeDBConnection(_DBConnectionString);
+            //InitializeDBConnection(_DBConnectionString);
         }
 
         private void ValidateData(RecordLine recordLine)
@@ -564,12 +571,15 @@ namespace PLCDeviceMonitor
         /// save data to db
         /// </summary>
         /// <param name="data"></param>
-        private void SaveToDB(String data)
+        private void SaveToDB(String data, ref OracleConnection connection)
         {
-            if (null == m_DBConnection)
+            if (null == connection)
+                connection = InitializeDBConnection();
+
+            if (null == connection)
                 return;
 
-            OracleCommand cmd = m_DBConnection.CreateCommand();
+            OracleCommand cmd = connection.CreateCommand();
             cmd.CommandText = "apps.cux_wms_warehouse_processor.process_request";
             cmd.CommandType = CommandType.StoredProcedure;
 
@@ -594,6 +604,9 @@ namespace PLCDeviceMonitor
                     if (++retryTime > m_DBRetryTimes)
                         throw new Exception(String.Format("保存数据到数据库失败. {0}", ex));
 
+                    connection.Dispose();
+                    connection = null;
+
                     Thread.Sleep(m_DBRetryInterval);
                 }
             }
@@ -603,7 +616,7 @@ namespace PLCDeviceMonitor
         /// threadpool callback func
         /// </summary>
         /// <param name="data"></param>
-        public void ProcessData(RecordLine recordLine)
+        public void ProcessData(RecordLine recordLine, ref OracleConnection connection)
         {
             if (null == recordLine || 0 == recordLine.ReadMark)
                 return;
@@ -615,7 +628,7 @@ namespace PLCDeviceMonitor
 
                 Log.Info(String.Format("生成数据报文：[{0}].", dataStr));
 
-                SaveToDB(dataStr);
+                SaveToDB(dataStr, ref connection);
                 SaveToFile(dataStr);
 
                 recordLine.Processed = true;
@@ -971,6 +984,7 @@ namespace PLCDeviceMonitor
             if (null == recordLine)
                 return;
 
+            OracleConnection connection = m_DataProcessor.InitializeDBConnection();
             DateTime stamp;
             while (!m_CancelToken.IsCancellationRequested)
             {
@@ -980,7 +994,7 @@ namespace PLCDeviceMonitor
                     recordLine.ReadData(m_Com);
                 }
 
-                m_DataProcessor.ProcessData(recordLine);
+                m_DataProcessor.ProcessData(recordLine, ref connection);
 
                 if (0 != recordLine.ReadMark && recordLine.Processed)
                 {
