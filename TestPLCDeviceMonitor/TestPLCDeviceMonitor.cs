@@ -13,7 +13,7 @@ namespace TestPLCDeviceMonitor
         {
             String patternStr = "%logger - %date - %level - T[%thread] - [ %message ] %exception%newline";
             String filename = @"log\PLC-Test-Log";
-            PLCDeviceMonitor.Log.AddFileLogger(filename, patternStr);
+            Log.AddFileLogger(filename, patternStr);
 
             config.BackupFilename = "backup.txt";
             config.DBConnectionString = "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.101.233)(PORT=1524))(CONNECT_DATA=(SERVICE_NAME=test)));User Id=cuxwms;Password=cuxwms;";
@@ -27,7 +27,7 @@ namespace TestPLCDeviceMonitor
         {
             try
             {
-                PLCDeviceMonitor.DeviceMonitor monitor = PLCDeviceMonitor.DeviceMonitor.GetPLCDeviceMonitor(config);
+                PLCDeviceMonitor.DeviceMonitor monitor = PLCDeviceMonitor.DeviceMonitor.GenInstance(config);
             }
             catch (System.Exception ex)
             {

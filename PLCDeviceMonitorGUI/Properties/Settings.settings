@@ -23,13 +23,6 @@
     <Setting Name="MsgFormatter" Type="System.String" Scope="User">
       <Value Profile="(Default)">STACK-REP^%PalletizerName^%PlateCode^%BoxCode&amp;Amount^N</Value>
     </Setting>
-    <Setting Name="OracleDB" Type="(Connection string)" Scope="Application">
-      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.101.242)(PORT=1528)))(CONNECT_DATA=(SERVICE_NAME = UAT2)));User Id=cuxwms;Password=cuxwms;&lt;/ConnectionString&gt;
-&lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.101.242)(PORT=1528)))(CONNECT_DATA=(SERVICE_NAME = UAT2)));User Id=cuxwms;Password=cuxwms;</Value>
-    </Setting>
     <Setting Name="Title" Type="System.String" Scope="User">
       <Value Profile="(Default)">PLC设备监控</Value>
     </Setting>
@@ -50,6 +43,13 @@
     </Setting>
     <Setting Name="SingleInstance" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="OracleDB" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.101.233)(PORT=1524)))(CONNECT_DATA=(SERVICE_NAME = test)));User Id=cuxwms;Password=cuxwms;&lt;/ConnectionString&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.101.233)(PORT=1524)))(CONNECT_DATA=(SERVICE_NAME = test)));User Id=cuxwms;Password=cuxwms;</Value>
     </Setting>
   </Settings>
 </SettingsFile>

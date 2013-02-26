@@ -107,18 +107,6 @@ namespace PLCDeviceMonitorGUI.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.101.2" +
-            "42)(PORT=1528)))(CONNECT_DATA=(SERVICE_NAME = UAT2)));User Id=cuxwms;Password=cu" +
-            "xwms;")]
-        public string OracleDB {
-            get {
-                return ((string)(this["OracleDB"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("PLC设备监控")]
@@ -200,6 +188,18 @@ namespace PLCDeviceMonitorGUI.Properties {
             }
             set {
                 this["SingleInstance"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.101.2" +
+            "33)(PORT=1524)))(CONNECT_DATA=(SERVICE_NAME = test)));User Id=cuxwms;Password=cu" +
+            "xwms;")]
+        public string OracleDB {
+            get {
+                return ((string)(this["OracleDB"]));
             }
         }
     }

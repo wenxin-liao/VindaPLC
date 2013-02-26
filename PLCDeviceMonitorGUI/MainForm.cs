@@ -127,7 +127,7 @@ namespace PLCDeviceMonitorGUI
                         Exception = loggingEvent.ExceptionObject == null ? null : loggingEvent.ExceptionObject.ToString(),
                     };
 
-                    PLCDeviceMonitorLogDatabaseDriver.InsertLogEvent(item);
+                    //PLCDeviceMonitorLogDatabaseDriver.InsertLogEvent(item);
 
                     String msg = String.Format("{0} - {1},{2:D3} - {3} - T[{4}] - [ {5} ] {6}\n",
                         loggingEvent.LoggerName,
@@ -182,7 +182,7 @@ namespace PLCDeviceMonitorGUI
             InitializeConfiguration();
             Log.Info("初始化配置对象成功.");
 
-            monitor = DeviceMonitor.GetPLCDeviceMonitor(config);
+            monitor = DeviceMonitor.GenInstance(config);
         }
 
         void InitializeComplete(object sender, RunWorkerCompletedEventArgs e)
